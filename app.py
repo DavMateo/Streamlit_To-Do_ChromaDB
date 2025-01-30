@@ -5,7 +5,7 @@ from sentence_transformers import SentenceTransformer
 from chromadb import Settings
 from datetime import datetime
 
-# Definiendo las variables necesarias
+
 PATH = "./data"
 MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 COLLECTION_NAME = "tareas"
@@ -72,12 +72,14 @@ def init_chroma(dict_config: dict) -> list:
             "descripcion": "Esta colección almacenará toda la información de las tareas del usuario ordenados por índice.",
             "creado": str(datetime.now()),
             "hnsw:space": "cosine",
-            "hnsw:search_ef": dict_config["cant_cpu"],
+            "hnsw:search_ef": dict_config["construction_ef"],
             "hnsw:construction_ef": dict_config["search_ef"],
             "hnsw:num_threads": dict_config["cant_cpu"]
         }
     )
     return [client, coleccion]
+
+obj1, obj2 = init_chroma(cant_cpus_disp())
 
 
 # Inicializando y ejecución del modelo de embeddings
@@ -117,7 +119,7 @@ if "tareas" not in st.session_state:
     ]
 
 
-# Definiendo la lógica de actualizar una tarea
+# Definiendo la lógica de finalizar una tarea
 def completar_tarea(id_tarea):
     for tarea in st.session_state.tareas:
         if tarea["id"] == id_tarea:
@@ -176,8 +178,7 @@ def crear_tarjeta(tarea, col, tab_index):
                         <div style='
                             text-align: right;
                             color: #5F6A6A;
-                            margin: .75rem 0;'>
-                            Fecha: {tarea["fecha"]}
+              json             Fecha: {tarea["fecha"]}
                         </div>
                     """, unsafe_allow_html=True)
 
@@ -210,3 +211,29 @@ for tab_index, (estado, tab) in enumerate(estados_tabs.items()):
             crear_tarjeta(tarea, col, tab_index)
 
 
+
+obj2.add(
+    documents=[
+        str({
+            "titulo": "Probando app Streamlit",
+            "descripcion": "Esta es una tarea de prueba."
+        }),
+        str({
+            "titulo": "Corrigiendo problemas del código",
+            "descripcion": "Descripción de la **tarea n°2** del test."
+        })
+    ],
+    metadatas=[
+        {
+            "id": "id1",
+            "fecha": "26/01/2025",
+            "estado": True
+        },
+        {
+            "id": "id2",
+            "fecha": "14/01/2025",
+            "estado": True
+        }
+    ],
+    ids=["id1", "id2"]
+)
