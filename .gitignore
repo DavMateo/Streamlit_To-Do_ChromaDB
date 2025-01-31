@@ -11,6 +11,8 @@ training.log
 models/best_model
 backend/models/wandb
 
+### Excluyendo carpeta de base de datos ###
+data/
 
 ### dotenv ###
 .env

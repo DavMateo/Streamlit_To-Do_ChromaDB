@@ -5,7 +5,7 @@ from example import tareas
 # Definiendo la lógica de finalizar una tarea
 def completar_tarea(id_tarea: list, coleccion: Collection):
     for tarea in tareas:
-        # Encontrar la tarea a editar
+        # Encontrar la tarea a completar
         if tarea["id"] == id_tarea:
             coleccion.update(
                 ids=[tarea["id"]],  #Buscar referencia por ID

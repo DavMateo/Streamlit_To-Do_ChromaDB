@@ -33,7 +33,9 @@ def nueva_tarjeta(tarea, col, tab_index, coleccion):
                             type="secondary",
                             key=f"btn_delete{tarea["id"]}_{tab_index}"
                         ):
-                            # Consulta ChromaDB para eliminar [Insertar aquí]
+                            # Eliminando el elemento de la base de datos
+                            coleccion.delete(ids=[tarea["id"]])
+                            
                             st.rerun()
             
             # Container: tarea__footer
